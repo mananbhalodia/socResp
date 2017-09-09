@@ -3,7 +3,7 @@ $font-stack: Helvetica, San Francisco, Arial;
 * {
 margin: 0;
 padding: 0;
-overflow-x: hidden;
+// overflow-x: hidden;
 }
 body{
   font-family: $font-stack;
@@ -12,7 +12,7 @@ body{
 
 #path{
   // width:100vw;
-  overflow-x:hidden;
+  // overflow-x:hidden;
 }
 
 div.description{
@@ -25,19 +25,34 @@ div.description{
 }
 
 #Contents{
-  overflow-y: scroll;
+  // overflow-y: scroll;
   // margin-top: 50px;
 }
 
-#shelters{
+#newPatient{
   margin-top:-200px;
 }
 
-#shelterTitle{
+#newPatientTitle{
   font-size:40px;
   font-family:Arial, Helvetica, sans-serif;
   text-align:center;
 }
+
+#returningPatient{
+  margin-top:-200px;
+  display:none;
+}
+
+#returningPatientTitle{
+  font-size:40px;
+  font-family:Arial, Helvetica, sans-serif;
+  text-align:center;
+}
+
+// #navBarMenu:hover{
+//   opacity:1;
+// }
 // #panels{
 //   width:50vw;
 // }
