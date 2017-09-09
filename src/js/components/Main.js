@@ -34,8 +34,19 @@ class Main extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('An essay was submitted: ' + this.state.name + " " + this.state.conditions + " " + this.state.medications);
     event.preventDefault();
+    const itemsRef = firebase.database().ref('users');
+    const item = {
+      name: this.state.name,
+      conditions: this.state.conditions,
+      medications: this.state.medications
+    }
+    itemsRef.push(item);
+    this.setState({
+      name: '',
+      conditions: '',
+      medications: ''
+    })
   }
 
 
