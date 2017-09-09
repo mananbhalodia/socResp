@@ -4,6 +4,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import { Provider } from "react-redux";
 import ReactDOM from "react-dom"
 import store from './redux/Store';
+import Rbootstrap from 'react-bootstrap';
 
 //import components
 import Main from './components/Main';

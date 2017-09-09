@@ -3,8 +3,52 @@ $font-stack: Helvetica, San Francisco, Arial;
 * {
 margin: 0;
 padding: 0;
+overflow-x: hidden;
 }
 body{
   font-family: $font-stack;
   font-size: 1em;
+}
+
+#path{
+  // width:100vw;
+  overflow-x:hidden;
+}
+
+div.description{
+	position:relative; /* absolute position (so we can position it where we want)*/
+	bottom:300px; /* position will be on bottom */
+	left:59vw;
+  width:38vw;
+  font-family: monospace;
+	/* styling bellow */
+}
+
+#Contents{
+  overflow-y: scroll;
+  // margin-top: 50px;
+}
+
+#shelters{
+  margin-top:-200px;
+}
+
+#shelterTitle{
+  font-size:40px;
+  font-family:Arial, Helvetica, sans-serif;
+  text-align:center;
+}
+// #panels{
+//   width:50vw;
+// }
+
+p.description_content{
+	padding:10px;
+	margin:0px;
+  font-size: 25px;
+  background-color:rgba(40,40,40,.3);
+  color:whitesmoke;
+  border-radius:15px;
+  // opacity:0.6; /* transparency */
+	filter:alpha(opacity=60); /* IE transparency */
 }
