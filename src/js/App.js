@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import ReactDOM from "react-dom"
 import store from './redux/Store';
 import * as firebase from 'firebase';
+import Rbootstrap from 'react-bootstrap';
 
 //import components
 import Main from './components/Main';
