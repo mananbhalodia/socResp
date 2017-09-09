@@ -4,12 +4,23 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import { Provider } from "react-redux";
 import ReactDOM from "react-dom"
 import store from './redux/Store';
+import * as firebase from 'firebase';
 
 //import components
 import Main from './components/Main';
 
 //import styles scss
 import styles from '../scss/styles.scss';
+
+var config = {
+    apiKey: "AIzaSyA_b_DylIRjlSHQAmNaccg0ZMcgPp00QFQ",
+    authDomain: "socresp-c2a44.firebaseapp.com",
+    databaseURL: "https://socresp-c2a44.firebaseio.com",
+    projectId: "socresp-c2a44",
+    storageBucket: "socresp-c2a44.appspot.com",
+    messagingSenderId: "420921585679"
+  };
+  firebase.initializeApp(config);
 
 ReactDOM.render((
   <Provider store={store}>
