@@ -5,51 +5,9 @@ import { withRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
 import { Navbar, Jumbotron, Button, Nav, NavItem, navInstance, NavDropdown, MenuItem, FormGroup, InputGroup, FormControl, DropdownButton, Col, ControlLabel } from 'react-bootstrap';
 import { scroller } from 'react-scroll';
-import { Image, List, Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
-// import Form from './Form';
-// import MyForm from './form.class';
-// import DevTools from 'mobx-react-form-devtools';
-// import MobxReactForm from 'mobx-react-form';
-// import validatorjs from 'validatorjs';
-
-// const form = new MyForm();
-
-// const plugins = { dvr: validatorjs };
-
-
-
-// const fields = {
-//   email: {
-//     label: 'Email',
-//     placeholder: 'Insert Email',
-//     rules: 'required|email|string|between:5,25',
-//   },
-//   password: {
-//     label: 'Password',
-//     placeholder: 'Insert Password',
-//     rules: 'required|string|between:5,25',
-//   },
-// };
-
-// const hooks = {
-
-//   onSuccess(form) {
-//     alert('Form is valid! Send the request here.');
-//     // get field values
-//     console.log('Form Values!', form.values());
-//   },
-
-//   onError(form) {
-//     // get all form errors
-//     console.log('All form errors', form.errors());
-//     // invalidate the form with a custom error message
-//     form.invalidate('This is a generic error message!');
-//   },
-
-// };
-
-// DevTools.register({ form });
-// DevTools.select('form');
+import { Divider, Image, List, Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+import { Autosize, Autocomplete, DropDown, Mask, DatePicker, Combobox } from "react-input-enhancements"
+import ReactDOM from "react-dom"
 
 
 class Main extends React.Component {
@@ -68,6 +26,10 @@ class Main extends React.Component {
   }
 
 
+
+  getInput() {
+    return input;
+  }
   handleChangeForm = (e, { value }) => this.setState({ value })
 
   handleChange(event) {
@@ -89,6 +51,60 @@ class Main extends React.Component {
     document.getElementById("newPatient").style.display = "none";
     document.getElementById("patientDataRecs").style.display = "block";
     scroller.scrollTo('patientDataRecs', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollResults = (e) => {
+    scroller.scrollTo('patientDataRecs', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollShelterRadios = (e) => {
+    scroller.scrollTo('radiosShelter', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollPantryRadios = (e) => {
+    scroller.scrollTo('radiosPantries', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollPantries = (e) => {
+    scroller.scrollTo('foodPantriesTitle', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollHealthClinic = (e) => {
+    scroller.scrollTo('healthClinicsTitle', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
+
+  scrollClinicRadios = (e) => {
+    scroller.scrollTo('radiosHealthClinic', {
       duration: 1500,
       delay: 100,
       smooth: true,
@@ -124,6 +140,8 @@ class Main extends React.Component {
       offset: -60
     })
   }
+
+
 
   scrollNP = (e) => {
     console.log("bye");
@@ -185,6 +203,8 @@ class Main extends React.Component {
     // DevTools.register({ form });
     // DevTools.select('form');
     const { value } = this.state
+    let input;
+
 
     return (
       <div className="WebPage">
@@ -196,9 +216,9 @@ class Main extends React.Component {
               </Navbar.Brand>
             </Navbar.Header>
             <Nav>
-              <NavItem eventKey={1} onSelect={this.handleSelect} href="#">Shelters</NavItem>
-              <NavItem eventKey={2} href="#">Health Clinics</NavItem>
-              <NavItem eventKey={3} href="#">Food Pantries</NavItem>
+              <NavItem eventKey={1} onClick={this.scrollShelter} href="#">Shelters</NavItem>
+              <NavItem eventKey={2} onClick={this.scrollHealthClinic} href="#">Health Clinics</NavItem>
+              <NavItem eventKey={3} onClick={this.scrollPantries} href="#">Food Pantries</NavItem>
               <NavDropdown eventKey={4} title="Other" id="basic-nav-dropdown">
                 <MenuItem eventKey={4.1}>Family Planning</MenuItem>
                 <MenuItem eventKey={4.2}>Financial Assistance</MenuItem>
@@ -267,69 +287,69 @@ class Main extends React.Component {
                 </List.Content>
                 <Form id="Important">
                   <div>
-                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Recommended Care</p>
+                    <p style={{ fontSize: 20, paddingBottom: "10px", marginLeft: "25px", marginTop: "15px" }}>Recommended Care</p>
                   </div>
-                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={TextArea} label='Immediate Attention' style={{ width: "47vw" }} placeholder="Temp critical data" readOnly />
                     <Form.Field control={TextArea} label='Suggested Resources' style={{ width: "47vw" }} placeholder="Temp suggested resources" readOnly />
                   </Form.Group>
                 </Form>
                 <List.Content>
-            </List.Content>
+                </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated='right'>
                 </List.Content>
                 <Form id="currentResources">
                   <div>
-                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Current Resources</p>
+                    <p style={{ fontSize: 20, paddingBottom: "10px", marginLeft: "25px", marginTop: "15px" }}>Current Resources</p>
                   </div>
-                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={Input} label='Name' style={{ width: "20vw" }} placeholder="Name" readOnly />
                     <Form.Field control={Input} label='Type' style={{ width: "20vw" }} placeholder="Type" readOnly />
                     <Form.Field control={Input} label='Location' style={{ width: "54vw" }} placeholder="Location" readOnly />
                   </Form.Group>
                 </Form>
                 <List.Content>
-            </List.Content>
+                </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated='right'>
                 </List.Content>
                 <Form id="medicalRecords">
                   <div>
-                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Medical Records</p>
+                    <p style={{ fontSize: 20, paddingBottom: "10px", marginLeft: "25px", marginTop: "15px" }}>Medical Records</p>
                   </div>
-                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={TextArea} label='Conditions' style={{ width: "47vw" }} placeholder="Temp Active Health Conditions" readOnly />
                     <Form.Field control={TextArea} label='Medical History' style={{ width: "47vw" }} placeholder="Temp Medical Data" readOnly />
-                    </Form.Group>
-                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  </Form.Group>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={Input} label='Age' style={{ width: "20vw" }} placeholder="Age" readOnly />
                     <Form.Field control={Input} label='Gender' style={{ width: "20vw" }} placeholder="gender" readOnly />
                     <Form.Field control={Input} label='Medications' style={{ width: "54vw" }} placeholder="All Active Medicine" readOnly />
                   </Form.Group>
                 </Form>
                 <List.Content>
-            </List.Content>
+                </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated='right'>
                 </List.Content>
                 <Form id="specialConditions">
                   <div>
-                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Special Accomodations</p>
+                    <p style={{ fontSize: 20, paddingBottom: "10px", marginLeft: "25px", marginTop: "15px" }}>Special Accomodations</p>
                   </div>
-                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={TextArea} label='Family' style={{ width: "40vw" }} placeholder="All Present Family Members" readOnly />
                     <Form.Field control={TextArea} label='Personal Notes' style={{ width: "54vw" }} placeholder="Personal Notes/Requests" readOnly />
-                    </Form.Group>
-                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                  </Form.Group>
+                  <Form.Group style={{ fontSize: 16, marginLeft: "15px" }}>
                     <Form.Field control={Input} label='Attendee Notes' style={{ width: "94vw" }} placeholder="Attendee Notes" readOnly />
                   </Form.Group>
                 </Form>
                 <List.Content>
-            </List.Content>
+                </List.Content>
               </List.Item>
             </List>
           </div>
@@ -352,7 +372,558 @@ class Main extends React.Component {
         <div id="shelters">
           <p id="sheltersTitle"> Shelters </p>
 
+          <div >
+            <FormGroup style={{ marginLeft: "6vw", marginBottom: "70px" }}>
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Location</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div >
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw", marginBottom: "70px" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Benefits</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginLeft: "6vw" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Restrictions</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginBottom: "70px" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Type</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div>
+            <FormGroup id="radiosShelter" style={{ marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "15px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Medical Assistance </label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "100px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Drug Rehabitilation </label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "100px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Family Accomodation </label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "40px", display: "inline-block", marginLeft: "20px" }}>
+                <Col xs={2} style={{ width: "44vw" }}>
+                  <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Services</p>
+                  <Combobox
+                    value={value}
+                    options={['Food Pantry', 'Free Clinic', 'Homeless Shelter', 'Family Services']}
+                    dropdownProps={{ style: { width: '100%' } }}
+                    onSelect={this.handleSubmit}
+                    autocomplete
+                    id="locCombo"
+                  >
+                    {(inputProps, otherProps, registerInput) =>
+                      <FormControl id="locationCombo"
+                        {...inputProps}
+                        ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                        type='text'
+                        placeholder='No Preference'
+                      />
+                    }
+                  </Combobox>
+
+
+                </Col>
+
+              </div>
+            </FormGroup>
+            <div>
+
+            </div>
+          </div>
+          <FormGroup >
+            <div >
+              <p style={{ fontSize: 14, fontWeight: 700, marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>Your Resources</p>
+              <Button bsStyle="primary" style={{ display: "inline-block", marginLeft: "850px" }} bsSize="lg" onClick={this.scrollShelterRadios}>Filter Shelters</Button>
+              <Form.Field style={{ fontSize: 14, width: "50vw", marginLeft: "6vw", marginTop: "10px", height: "120px" }} control={TextArea} placeholder="Resources that best match your filter" readOnly />
+
+            </div>
+            <div >
+
+            </div>
+          </FormGroup>
+
+
+
+
+
         </div>
+
+        <div id="healthClinics" style={{marginTop:"60px"}}>
+          <p id="healthClinicsTitle"> Health Clinics </p>
+
+          <div >
+            <FormGroup style={{ marginLeft: "6vw", marginBottom: "70px" }}>
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Location</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div >
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw", marginBottom: "70px" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Speciality</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginLeft: "6vw" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Vaccines</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginBottom: "70px" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Urgency</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div>
+            <FormGroup id="radiosHealthClinic" style={{ marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "15px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Sliding Scale Fee</label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "140px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Insurance </label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "140px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Family</label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "40px", display: "inline-block", marginLeft: "105px" }}>
+                <Col xs={2} style={{ width: "44vw" }}>
+                  <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Services</p>
+                  <Combobox
+                    value={value}
+                    options={['Food Pantry', 'Free Clinic', 'Homeless Shelter', 'Family Services']}
+                    dropdownProps={{ style: { width: '100%' } }}
+                    onSelect={this.handleSubmit}
+                    autocomplete
+                    id="locCombo"
+                  >
+                    {(inputProps, otherProps, registerInput) =>
+                      <FormControl id="locationCombo"
+                        {...inputProps}
+                        ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                        type='text'
+                        placeholder='No Preference'
+                      />
+                    }
+                  </Combobox>
+
+
+                </Col>
+
+              </div>
+            </FormGroup>
+            <div>
+
+            </div>
+          </div>
+          <FormGroup >
+            <div >
+              <p style={{ fontSize: 14, fontWeight: 700, marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>Your Resources</p>
+              <Button bsStyle="primary" style={{ display: "inline-block", marginLeft: "850px" }} bsSize="lg" onClick={this.scrollClinicRadios}>Filter Clinics</Button>
+              <Form.Field style={{ fontSize: 14, width: "50vw", marginLeft: "6vw", marginTop: "10px", height: "120px" }} control={TextArea} placeholder="Resources that best match your filter" readOnly />
+
+            </div>
+            <div >
+
+            </div>
+          </FormGroup>
+        </div>
+
+        <div id="foodPantries" style={{marginTop:"60px"}}>
+          <p id="foodPantriesTitle"> Food Pantries </p>
+
+          <div >
+            <FormGroup style={{ marginLeft: "6vw", marginBottom: "70px" }}>
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Location</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div >
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw", marginBottom: "70px" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Dietary</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginLeft: "6vw" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Benefits</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div style={{ marginBottom: "70px" }}>
+            <FormGroup >
+              <Col xs={2} style={{ width: "44vw" }}>
+                <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Hours</p>
+                <Combobox
+                  value={value}
+                  options={['Apple', 'Banana', 'Orange', 'Manan', 'One Of These Is Not Like The Other']}
+                  dropdownProps={{ style: { width: '100%' } }}
+                  onSelect={this.handleSubmit}
+                  autocomplete
+                  id="locCombo"
+                >
+                  {(inputProps, otherProps, registerInput) =>
+                    <FormControl id="locationCombo"
+                      {...inputProps}
+                      ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                      type='text'
+                      placeholder='No Preference'
+                    />
+                  }
+                </Combobox>
+
+
+              </Col>
+            </FormGroup>
+
+          </div>
+
+          <div>
+            <FormGroup id="radiosPantries" style={{ marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "15px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Baltimore City Resident</label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "115px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Clothing </label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", fontSize: 14, paddingLeft: "115px", paddingTop: "30px", paddingBottom: "-10px" }}>
+                <label style={{ display: "inline-block" }}>Financial Assistance</label>
+                <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                  <Form.Field control={Radio} label='Yes' onClick={this.toggle} />
+                  <Form.Field control={Radio} label='No' onClick={this.toggle} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "40px", display: "inline-block", marginLeft: "35px" }}>
+                <Col xs={2} style={{ width: "44vw" }}>
+                  <p style={{ width: "6vw", fontSize: 16, marginLeft: "25px", marginTop: "10px" }}>Services</p>
+                  <Combobox
+                    value={value}
+                    options={['Food Pantry', 'Free Clinic', 'Homeless Shelter', 'Family Services']}
+                    dropdownProps={{ style: { width: '100%' } }}
+                    onSelect={this.handleSubmit}
+                    autocomplete
+                    id="locCombo"
+                  >
+                    {(inputProps, otherProps, registerInput) =>
+                      <FormControl id="locationCombo"
+                        {...inputProps}
+                        ref={c => registerInput(ReactDOM.findDOMNode(c))}
+                        type='text'
+                        placeholder='No Preference'
+                      />
+                    }
+                  </Combobox>
+
+
+                </Col>
+
+              </div>
+            </FormGroup>
+            <div>
+
+            </div>
+          </div>
+          <FormGroup >
+            <div >
+              <p style={{ fontSize: 14, fontWeight: 700, marginLeft: "6vw", marginTop: "30px", display: "inline-block" }}>Your Resources</p>
+              <Button bsStyle="primary" style={{ display: "inline-block", marginLeft: "850px" }} bsSize="lg" onClick={this.scrollPantryRadios}>Filter Pantries</Button>
+              <Form.Field style={{ fontSize: 14, width: "50vw", marginLeft: "6vw", marginTop: "10px", height: "120px" }} control={TextArea} placeholder="Resources that best match your filter" readOnly />
+
+            </div>
+            <div >
+
+            </div>
+          </FormGroup>
+        </div>
+
+        <div id="bottomFeeders" style={{marginTop:"275px"}}>
+        <Divider clearing />
+        <p style={{paddingBottom:"5px", paddingRight:"10px", float:"right"}}>Noam Dorogoyer/Manan Bhalodia 2017</p>
+          </div>
 
       </div>
 
