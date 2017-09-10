@@ -15,6 +15,11 @@ body{
   // overflow-x:hidden;
 }
 
+#patientDataRecs{
+  display:none;
+  margin-top:-200px;
+}
+
 div.description{
 	position:relative; /* absolute position (so we can position it where we want)*/
 	bottom:300px; /* position will be on bottom */
@@ -29,8 +34,20 @@ div.description{
   // margin-top: 50px;
 }
 
+#welcomePatientTitle{
+  font-size:40px;
+  font-family:Arial, Helvetica, sans-serif;
+  text-align:center;
+}
+
+#newPF{
+  padding:30px;
+  font-size:16px;
+}
+
 #newPatient{
   margin-top:-200px;
+  font-size:20px;
 }
 
 #newPatientTitle{

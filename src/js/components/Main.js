@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
 import { Navbar, Jumbotron, Button, Nav, NavItem, navInstance, NavDropdown, MenuItem, FormGroup, InputGroup, FormControl, DropdownButton, Col, ControlLabel } from 'react-bootstrap';
 import { scroller } from 'react-scroll';
-import { Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+import { Image, List, Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
 // import Form from './Form';
 // import MyForm from './form.class';
 // import DevTools from 'mobx-react-form-devtools';
@@ -85,17 +85,28 @@ class Main extends React.Component {
     event.preventDefault();
   }
 
-showNP = (e) => {
-  console.log("inside show new");
-  document.getElementById("newPatient").style.display="block";
-  document.getElementById("returningPatient").style.display="none";
-}
+  handleSubmitNP = (e) => {
+    document.getElementById("newPatient").style.display = "none";
+    document.getElementById("patientDataRecs").style.display = "block";
+    scroller.scrollTo('patientDataRecs', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+  }
 
-showRP = (e) => {
-  console.log("inside show returning");
-  document.getElementById("newPatient").style.display="none";
-  document.getElementById("returningPatient").style.display="block";
-}
+  showNP = (e) => {
+    console.log("inside show new");
+    document.getElementById("newPatient").style.display = "block";
+    document.getElementById("returningPatient").style.display = "none";
+  }
+
+  showRP = (e) => {
+    console.log("inside show returning");
+    document.getElementById("newPatient").style.display = "none";
+    document.getElementById("returningPatient").style.display = "block";
+  }
 
   componentWillMount() {
     this.props.dispatch({ type: 'HELLO' });
@@ -117,6 +128,7 @@ showRP = (e) => {
   scrollNP = (e) => {
     console.log("bye");
     this.showNP();
+    document.getElementById("patientDataRecs").style.display = "none";
     scroller.scrollTo('newPatient', {
       duration: 1500,
       delay: 100,
@@ -125,9 +137,14 @@ showRP = (e) => {
     })
   }
 
+  printEntry = (e) => {
+    console.log(e.target.value);
+  }
+
   scrollRP = (e) => {
     console.log("hello");
     this.showRP();
+    document.getElementById("patientDataRecs").style.display = "none";
     scroller.scrollTo('returningPatient', {
       duration: 1500,
       delay: 100,
@@ -208,56 +225,134 @@ showRP = (e) => {
 
         <div id="newPatient">
           <p id="newPatientTitle">New Patient Form</p>
-          <Form>
+          <Form id="newPF">
             <Form.Group widths='equal'>
               <Form.Field control={Input} label='First name' placeholder='First name' />
               <Form.Field control={Input} label='Last name' placeholder='Last name' />
               <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' />
             </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field control={Input} label='Conditions' placeholder="Enter any medical conditions you're experiencing "/>
-              <Form.Field control={Input} label='Medications' placeholder='Enter any over or under the counter medications you are currently taking' />
-              <Form.Field control={Input} label='Medical History' placeholder="Enter your medical history "/>
+            <Form.Group style={{ padding: "15px" }}>
+              <label>Needs: </label>
+              <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+                <Form.Field control={Radio} label='Homeless Shelter' onClick={this.toggle} />
+
+                <Form.Field control={Radio} label='Food Pantry' onClick={this.toggle} />
+
+                <Form.Field control={Radio} label='Free Clinic' onClick={this.toggle} />
+              </div>
+              <div style={{ width: "47vw", marginLeft: "70px", paddingBottom: "30px" }}>
+                <Form.Field control={TextArea} label='Family' placeholder="How many members are in your family unit and are there any special conditons that need to be met?" />
+              </div>
             </Form.Group>
-            <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...' />
+            <Form.Group>
+              <Form.Field control={TextArea} label='Conditions' style={{ width: "47vw" }} placeholder="Enter any medical conditions you're experiencing" />
+              <Form.Field control={TextArea} label='Medications' style={{ width: "47vw" }} placeholder='Enter any over or under the counter medications you are currently taking' />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field control={TextArea} label='Medical History' style={{ width: "47vw" }} placeholder="Enter your medical history " />
+              <Form.Field control={TextArea} label='About' style={{ width: "47vw" }} placeholder='Tell us more about you...' />
+            </Form.Group>
             <Form.Field control={Checkbox} label='I agree to the Terms and Conditions' />
+            <Button bsStyle="primary" onClick={this.handleSubmitNP}>Submit</Button>
             {/* <Form.Field control={Button}>Submit</Form.Field> */}
           </Form>
+        </div>
+
+        <div id="patientDataRecs">
+          <p id="welcomePatientTitle" style={{ fontSize: 40 }}>Welcome Noam Dorogoyer</p>
+          <div>
+            <List divided verticalAlign='middle'>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="Important">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Recommended Care</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Immediate Attention' style={{ width: "47vw" }} placeholder="Temp critical data" readOnly />
+                    <Form.Field control={TextArea} label='Suggested Resources' style={{ width: "47vw" }} placeholder="Temp suggested resources" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="currentResources">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Current Resources</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Name' style={{ width: "20vw" }} placeholder="Name" readOnly />
+                    <Form.Field control={Input} label='Type' style={{ width: "20vw" }} placeholder="Type" readOnly />
+                    <Form.Field control={Input} label='Location' style={{ width: "54vw" }} placeholder="Location" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="medicalRecords">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Medical Records</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Conditions' style={{ width: "47vw" }} placeholder="Temp Active Health Conditions" readOnly />
+                    <Form.Field control={TextArea} label='Medical History' style={{ width: "47vw" }} placeholder="Temp Medical Data" readOnly />
+                    </Form.Group>
+                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Age' style={{ width: "20vw" }} placeholder="Age" readOnly />
+                    <Form.Field control={Input} label='Gender' style={{ width: "20vw" }} placeholder="gender" readOnly />
+                    <Form.Field control={Input} label='Medications' style={{ width: "54vw" }} placeholder="All Active Medicine" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="specialConditions">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Special Accomodations</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Family' style={{ width: "40vw" }} placeholder="All Present Family Members" readOnly />
+                    <Form.Field control={TextArea} label='Personal Notes' style={{ width: "54vw" }} placeholder="Personal Notes/Requests" readOnly />
+                    </Form.Group>
+                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Attendee Notes' style={{ width: "94vw" }} placeholder="Attendee Notes" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+            </List>
+          </div>
         </div>
 
         <div id="returningPatient" >
           <p id="returningPatientTitle">Returning Patient Form</p>
           <Form>
             <Form.Group widths='equal'>
-              <Form.Field control={Input} label='First name' placeholder='First name' />
+              <Form.Field control={Input} label='First name' placeholder='First name' onChange={this.printEntry} />
               <Form.Field control={Input} label='Last name' placeholder='Last name' />
               <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' />
             </Form.Group>
-            {/* <Form.Group inline>
-              <label>Quantity</label>
-              <Form.Field control={Radio} label='One' value='1' checked={value === '1'} onChange={this.handleChange} />
-              <Form.Field control={Radio} label='Two' value='2' checked={value === '2'} onChange={this.handleChange} />
-              <Form.Field control={Radio} label='Three' value='3' checked={value === '3'} onChange={this.handleChange} />
-            </Form.Group> */}
             <Form.Field control={TextArea} label='About' placeholder='Reason for your visit...' />
-            {/* <Form.Field control={Button}>Submit</Form.Field> */}
           </Form>
         </div>
-        {/* <div>
-          <DevTools.UI />
-          <Form form={form} />
-        </div> */}
-        {/* <div>
-          <MobxReactForm form={form} />
-          </div> */}
 
-        {/* <div>
-          <Jumbotron>
-            <h1>Give me your tired, your poor,...</h1>
-            <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-            <p><Button bsStyle="primary">Learn more</Button></p>
-          </Jumbotron>
-        </div> */}
+
+
+        <div id="shelters">
+          <p id="sheltersTitle"> Shelters </p>
+
+        </div>
 
       </div>
 
