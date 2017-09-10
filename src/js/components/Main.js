@@ -5,7 +5,15 @@ import { withRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
 import { Navbar, Jumbotron, Button, Nav, NavItem, navInstance, NavDropdown, MenuItem, FormGroup, InputGroup, FormControl, DropdownButton, Col, ControlLabel } from 'react-bootstrap';
 import { scroller } from 'react-scroll';
-import { Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+
+// import { Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+
+import { Image, List, Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+// import Form from './Form';
+// import MyForm from './form.class';
+// import DevTools from 'mobx-react-form-devtools';
+// import MobxReactForm from 'mobx-react-form';
+// import validatorjs from 'validatorjs';
 
 
 
@@ -18,9 +26,18 @@ class Main extends React.Component {
       medications: "",
       gender: "",
       medicalHistory: "",
+      family: "",
       about: "",
       copyData: "", 
-      currentData: ""
+      currentData: "", 
+      immediateAttn: "", 
+      clinicList: "",
+      suggestedResources: [],
+      currentResources: [],
+      age: "",
+      toggleHs: false,
+      toggleFp: false,
+      toggleFc: false
 
     };
     this.handleChange = this.handleChange.bind(this);
@@ -29,10 +46,14 @@ class Main extends React.Component {
     this.handleChange4 = this.handleChange4.bind(this);
     this.handleChange5 = this.handleChange5.bind(this);
     this.handleChange6 = this.handleChange6.bind(this);
+    this.handleChange7 = this.handleChange7.bind(this);
     this.handleChangeRet1 = this.handleChangeRet1.bind(this);
     this.handleChangeRet2 = this.handleChangeRet2.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmitRet = this.handleSubmitRet.bind(this);
+    this.toggleHs = this.toggleHs.bind(this);
+    this.toggleFp = this.toggleFp.bind(this);
+    this.toggleFc = this.toggleFc.bind(this);
   }
   
 
@@ -57,11 +78,23 @@ class Main extends React.Component {
   handleChange6(event) {
     this.setState({ about: event.target.value });
   }
+  handleChange7(event) {
+    this.setState({ family: event.target.value });
+  }
   handleChangeRet1(event) {
     this.setState({ name: event.target.value });
   }
   handleChangeRet2(event) {
     this.setState({ about: event.target.value });
+  }
+  toggleHs(event) {
+    this.setState({ toggleHs: !this.state.toggleHs });
+  }
+  toggleFp(event) {
+    this.setState({ toggleFp: !this.state.toggleFp });
+  }
+  toggleFc(event) {
+    this.setState({ toggleFc: !this.state.toggleFc });
   }
 
   handleSubmit(event) {
@@ -73,46 +106,102 @@ class Main extends React.Component {
       medications: this.state.medications,
       gender: this.state.gender,
       medicalHistory: this.state.medicalHistory,
+      family: this.state.family,
       about: this.state.about
     }
+    
     itemsRef.push(item);
-    this.setState({
-      name: '',
-      conditions: '',
-      medications: '',
-      gender: '',
-      medicalHistory: '',
-      about: ''
-    })
-  }
+    
+    this.forceUpdate();
+    console.log("conditions::::  ", this.state.conditions);
 
+    var clinics = this.state.clinicList;
+    var conditionList = this.state.conditions.split(" ");
+    console.log("conditions  ", conditionList);
+    for(let clinic in clinics) {
+      var clinicTags = clinics[clinic].tags;
+      console.log("clinic tags  ", clinicTags);
+    }
+    console.log("condition:  ", clinics);
+
+    document.getElementById("newPatient").style.display = "none";
+    document.getElementById("patientDataRecs").style.display = "block";
+    scroller.scrollTo('patientDataRecs', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
+
+  }
+searchStringInArray (str, strArray) {
+    for (var j=0; j<strArray.length; j++) {
+        if (strArray[j].match(str)) return 1;
+    }
+    return 0;
+}
+
+compArrays (Arr1, Arr2) {
+  var count = 0;
+  for (var j = 0; j<Arr1; j++) {
+  count += searchStringInArray(Arr1[j],Arr2);
+  }
+  return count;
+}
   handleSubmitRet(event) {
     event.preventDefault();
     let dataRep = this.state.copyData; 
       console.log("heyyyy: ", dataRep);
       for (let data in dataRep) {
         if (dataRep[data].name == this.state.name) {
-          this.state.currentData = dataRep[data]
-          console.log("heyyyyaaa: ", this.state.currentData);
+          this.state.name = dataRep[data].name;
+          this.state.conditions = dataRep[data].conditions;
+          this.state.medications = dataRep[data].medications;
+          this.state.family = dataRep[data].family;
+          this.state.gender = dataRep[data].gender;
+          this.state.medicalHistory = dataRep[data].medicalHistory;
+          this.state.about = dataRep[data].about;
+         console.log("LOGIN: ", this.state.name);
         }
       }
+
+        this.forceUpdate();
+         document.getElementById("returningPatient").style.display = "none";
+    document.getElementById("patientDataRecs").style.display = "block";
+    scroller.scrollTo('patientDataRecs', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+      offset: -60
+    })
   }
 
-showNP = (e) => {
-  console.log("inside show new");
-  document.getElementById("newPatient").style.display="block";
-  document.getElementById("returningPatient").style.display="none";
-}
+  // handleSubmitRP = (e) => {
+  //   document.getElementById("returningPatient").style.display = "none";
+  //   document.getElementById("patientDataRecs").style.display = "block";
+  //   scroller.scrollTo('patientDataRecs', {
+  //     duration: 1500,
+  //     delay: 100,
+  //     smooth: true,
+  //     offset: -60
+  //   })
+  // }
 
-showRP = (e) => {
-  console.log("inside show returning");
-  document.getElementById("newPatient").style.display="none";
-  document.getElementById("returningPatient").style.display="block";
-}
-
-  componentWillMount() {
-    this.props.dispatch({ type: 'HELLO' });
+  showNP = (e) => {
+    console.log("inside show new");
+    document.getElementById("newPatient").style.display = "block";
+    document.getElementById("returningPatient").style.display = "none";
   }
+
+  showRP = (e) => {
+    console.log("inside show returning");
+    document.getElementById("newPatient").style.display = "none";
+    document.getElementById("returningPatient").style.display = "block";
+  }
+
+  // componentWillMount() {
+  //   this.props.dispatch({ type: 'HELLO' });
+  // }
 
   handleHover = (e) => {
     this.style = { opacity: 1 };
@@ -130,46 +219,72 @@ showRP = (e) => {
   scrollNP = (e) => {
     console.log("bye");
     this.showNP();
+    document.getElementById("patientDataRecs").style.display = "none";
     scroller.scrollTo('newPatient', {
       duration: 1500,
       delay: 100,
       smooth: true,
       offset: -60
     })
+    this.setState({
+      name: '',
+      conditions: '',
+      medications: '',
+      gender: '',
+      medicalHistory: '',
+      family: '',
+      about: ''
+    })
+  }
+
+  printEntry = (e) => {
+    console.log(e.target.value);
   }
 
   scrollRP = (e) => {
     console.log("hello");
     this.showRP();
+    document.getElementById("patientDataRecs").style.display = "none";
     scroller.scrollTo('returningPatient', {
       duration: 1500,
       delay: 100,
       smooth: true,
       offset: -60
     })
+    this.setState({
+      name: '',
+      conditions: '',
+      medications: '',
+      gender: '',
+      medicalHistory: '',
+      family: '',
+      about: ''
+    })
   }
 
   componentDidMount() {
       const rootRef = firebase.database().ref();
       const speedRef = rootRef.child('users');
+      const tagRef = rootRef.child('clinics');
+      tagRef.on('value', snap =>{
+        let clinics = snap.val();
+        this.state.clinicList = clinics;
+
+      });
       speedRef.on('value', snap => {
 
         let items = snap.val();
         this.state.copyData = items;
-        console.log("USERSCOPY: ", this.state.copyData);
+        console.log("USERSCOPY: ", this.state.name);
         for (let item in items) {
-          console.log("USERSHERE: ", items[item].name)
+          if (this.state.name == items[item].name) {
+            this.state.currentData = items[item]
+          }
         }
-        
-        // this.setState({
-        //   speed: snap.val()
-        // });
+        this.forceUpdate();
+  
       });
 
-
-  }
-
-  componentWillMount() {
 
   }
 
@@ -177,7 +292,8 @@ showRP = (e) => {
 
 
   render() {
-    console.log(this.props.test)
+    console.log("render: ", this.state.currentData.gender)
+    var genderLive = this.state.currentData.gender;
     var Scroll = require('react-scroll');
     var Element = Scroll.Element;
     var scroller = Scroll.scroller;
@@ -231,27 +347,118 @@ showRP = (e) => {
 
         <div id="newPatient">
           <p id="newPatientTitle">New Patient Form</p>
-          <Form>
+          <Form id="newPF">
             <Form.Group widths='equal'>
               <Form.Field control={Input} label='Full name' placeholder='Full name' onChange={this.handleChange} />
               <Form.Field control={Input} label='Gender' placeholder='Gender' onChange={this.handleChange4} />
             
             </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field control={Input} label='Conditions' placeholder="Enter any medical conditions you're experiencing" onChange={this.handleChange2}/>
-              <Form.Field control={Input} label='Medications' placeholder='Enter any over or under the counter medications you are currently taking' onChange={this.handleChange3}/>
-              <Form.Field control={Input} label='Medical History' placeholder="Enter your medical history " onChange={this.handleChange5}/>
+            <Form.Group style={{ padding: "15px" }}>
+              <label>Needs: </label>
+              <div style={{ fontSize: 14, paddingLeft: "15px", paddingTop: "18px", paddingBottom: "-10px" }}>
+              <Checkbox label={<label>Homeless Shelter</label>} onChange={this.toggleHs}/>
+              <Checkbox label={<label>Food Pantry</label>} onChange={this.toggleFp}/>
+              <Checkbox label={<label>Free Clinics</label>} onChange={this.toggleFc}/>
+              </div>
+              <div style={{ width: "47vw", marginLeft: "70px", paddingBottom: "30px" }}>
+                <Form.Field control={TextArea} label='Family' placeholder="How many members are in your family unit and are there any special conditons that need to be met?" onChange={this.handleChange7}/>
+              </div>
             </Form.Group>
-            <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...' onChange={this.handleChange6}/>
+            <Form.Group>
+              <Form.Field control={TextArea} label='Conditions' style={{ width: "47vw" }} placeholder="Enter any medical conditions you're experiencing" onChange={this.handleChange2}/>
+              <Form.Field control={TextArea} label='Medications' style={{ width: "47vw" }} placeholder='Enter any over or under the counter medications you are currently taking' onChange={this.handleChange3} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field control={TextArea} label='Medical History' style={{ width: "47vw" }} placeholder="Enter your medical history " onChange={this.handleChange5}/>
+              <Form.Field control={TextArea} label='About' style={{ width: "47vw" }} placeholder='Tell us more about you...' onChange={this.handleChange6} />
+            </Form.Group>
             <Form.Field control={Checkbox} label='I agree to the Terms and Conditions' />
             <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
+            {/* <Form.Field control={Button}>Submit</Form.Field> */}
           </Form>
+        </div>
+
+        <div id="patientDataRecs">
+          <p id="welcomePatientTitle" style={{ fontSize: 40 }}>Welcome {this.state.name}</p>
+          <div>
+            <List divided verticalAlign='middle'>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="Important">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Recommended Care</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Immediate Attention' style={{ width: "47vw" }} placeholder="Immediate Attention" value={this.state.immediateAttn} readOnly />
+                    <Form.Field control={TextArea} label='Suggested Resources' style={{ width: "47vw" }} placeholder="Temp suggested resources" value={this.state.suggestedResources} readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="currentResources">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Current Resources</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Name' style={{ width: "20vw" }} placeholder="Name" readOnly />
+                    <Form.Field control={Input} label='Type' style={{ width: "20vw" }} placeholder="Type" readOnly />
+                    <Form.Field control={Input} label='Location' style={{ width: "54vw" }} placeholder="Location" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="medicalRecords">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Medical Records</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Conditions' style={{ width: "47vw" }} placeholder="Temp Active Health Conditions" value={this.state.conditions} readOnly />
+                    <Form.Field control={TextArea} label='Medical History' style={{ width: "47vw" }} placeholder="Temp Medical Data" value={this.state.medicalHistory} readOnly />
+                    </Form.Group>
+                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Age' style={{ width: "20vw" }} placeholder="Age" value={this.state.age} readOnly />
+                    <Form.Field control={Input} label='Gender' style={{ width: "20vw" }} placeholder="gender" value={this.state.gender} readOnly />
+                    <Form.Field control={Input} label='Medications' style={{ width: "54vw" }} placeholder="All Active Medicine" value={this.state.medications} readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated='right'>
+                </List.Content>
+                <Form id="specialConditions">
+                  <div>
+                    <p style={{fontSize:20, paddingBottom:"10px", marginLeft:"25px", marginTop:"15px"}}>Special Accomodations</p>
+                  </div>
+                  <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={TextArea} label='Family' style={{ width: "40vw" }} placeholder="All Present Family Members" value={this.state.family} readOnly />
+                    <Form.Field control={TextArea} label='Personal Notes' style={{ width: "54vw" }} placeholder="Personal Notes/Requests" value={this.state.about} readOnly />
+                    </Form.Group>
+                    <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
+                    <Form.Field control={Input} label='Attendee Notes' style={{ width: "94vw" }} placeholder="Attendee Notes" readOnly />
+                  </Form.Group>
+                </Form>
+                <List.Content>
+            </List.Content>
+              </List.Item>
+            </List>
+          </div>
         </div>
 
         <div id="returningPatient" >
           <p id="returningPatientTitle">Returning Patient Form</p>
           <Form>
-            <Form.Group widths='equal'>
+            <Form.Group widths='equal'>      
               <Form.Field control={Input} label='Full name' placeholder='Full name' onChange={this.handleChangeRet1}/>
               
               
@@ -266,21 +473,13 @@ showRP = (e) => {
             <Button bsStyle="primary" onClick={this.handleSubmitRet}>Submit</Button>
           </Form>
         </div>
-        {/* <div>
-          <DevTools.UI />
-          <Form form={form} />
-        </div> */}
-        {/* <div>
-          <MobxReactForm form={form} />
-          </div> */}
 
-        {/* <div>
-          <Jumbotron>
-            <h1>Give me your tired, your poor,...</h1>
-            <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-            <p><Button bsStyle="primary">Learn more</Button></p>
-          </Jumbotron>
-        </div> */}
+
+
+        <div id="shelters">
+          <p id="sheltersTitle"> Shelters </p>
+
+        </div>
 
       </div>
 
