@@ -32,7 +32,8 @@ class Main extends React.Component {
       currentData: "", 
       immediateAttn: "", 
       clinicList: "",
-      suggestedResources: [],
+      suggestedResources: "",
+      suggesTitle: "",
       currentResources: [],
       age: "",
       toggleHs: false,
@@ -118,11 +119,26 @@ class Main extends React.Component {
     var clinics = this.state.clinicList;
     var conditionList = this.state.conditions.split(" ");
     console.log("conditions  ", conditionList);
+    var index = "";
+    var indexTitle ="";
+    var count = 0;
     for(let clinic in clinics) {
       var clinicTags = clinics[clinic].tags;
       console.log("clinic tags  ", clinicTags);
+      var countWords = this.compArrays(conditionList, clinicTags);
+      if (countWords >= count) {
+        count = countWords;
+        index = clinics[clinic];
+        indexTitle = clinic;
+      }
+
     }
+    this.setState({ suggestedResources : index });
+    this.setState({ suggesTitle : indexTitle });
     console.log("condition:  ", clinics);
+    console.log("count:  ", count);
+    console.log("index:  ", index);
+    console.log("index:  ", indexTitle);
 
     document.getElementById("newPatient").style.display = "none";
     document.getElementById("patientDataRecs").style.display = "block";
@@ -134,20 +150,7 @@ class Main extends React.Component {
     })
 
   }
-searchStringInArray (str, strArray) {
-    for (var j=0; j<strArray.length; j++) {
-        if (strArray[j].match(str)) return 1;
-    }
-    return 0;
-}
 
-compArrays (Arr1, Arr2) {
-  var count = 0;
-  for (var j = 0; j<Arr1; j++) {
-  count += searchStringInArray(Arr1[j],Arr2);
-  }
-  return count;
-}
   handleSubmitRet(event) {
     event.preventDefault();
     let dataRep = this.state.copyData; 
@@ -176,6 +179,19 @@ compArrays (Arr1, Arr2) {
     })
   }
 
+searchStringInArray = (str, strArray) => {
+    for (var j=0; j<strArray.length; j++) {
+        if (strArray[j].match(str)) return 1;
+    }
+    return 0;
+}
+compArrays = (Arr1, Arr2) => {
+  var count = 0;
+  for (var j = 0; j<Arr1; j++) {
+  count += searchStringInArray(Arr1[j],Arr2);
+  }
+  return count;
+}
   // handleSubmitRP = (e) => {
   //   document.getElementById("returningPatient").style.display = "none";
   //   document.getElementById("patientDataRecs").style.display = "block";
@@ -391,7 +407,7 @@ compArrays (Arr1, Arr2) {
                   </div>
                   <Form.Group style={{fontSize:16, marginLeft:"15px"}}>
                     <Form.Field control={TextArea} label='Immediate Attention' style={{ width: "47vw" }} placeholder="Immediate Attention" value={this.state.immediateAttn} readOnly />
-                    <Form.Field control={TextArea} label='Suggested Resources' style={{ width: "47vw" }} placeholder="Temp suggested resources" value={this.state.suggestedResources} readOnly />
+                    <Form.Field control={TextArea} label='Suggested Resources' style={{ width: "47vw" }} placeholder="Temp suggested resources" value={this.state.suggesTitle + " - " + this.state.suggestedResources.address + "  " + this.state.suggestedResources.phone} readOnly />
                   </Form.Group>
                 </Form>
                 <List.Content>
