@@ -6,50 +6,7 @@ import * as firebase from 'firebase';
 import { Navbar, Jumbotron, Button, Nav, NavItem, navInstance, NavDropdown, MenuItem, FormGroup, InputGroup, FormControl, DropdownButton, Col, ControlLabel } from 'react-bootstrap';
 import { scroller } from 'react-scroll';
 import { Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
-// import Form from './Form';
-// import MyForm from './form.class';
-// import DevTools from 'mobx-react-form-devtools';
-// import MobxReactForm from 'mobx-react-form';
-// import validatorjs from 'validatorjs';
 
-// const form = new MyForm();
-
-// const plugins = { dvr: validatorjs };
-
-
-
-// const fields = {
-//   email: {
-//     label: 'Email',
-//     placeholder: 'Insert Email',
-//     rules: 'required|email|string|between:5,25',
-//   },
-//   password: {
-//     label: 'Password',
-//     placeholder: 'Insert Password',
-//     rules: 'required|string|between:5,25',
-//   },
-// };
-
-// const hooks = {
-
-//   onSuccess(form) {
-//     alert('Form is valid! Send the request here.');
-//     // get field values
-//     console.log('Form Values!', form.values());
-//   },
-
-//   onError(form) {
-//     // get all form errors
-//     console.log('All form errors', form.errors());
-//     // invalidate the form with a custom error message
-//     form.invalidate('This is a generic error message!');
-//   },
-
-// };
-
-// DevTools.register({ form });
-// DevTools.select('form');
 
 
 class Main extends React.Component {
@@ -58,14 +15,26 @@ class Main extends React.Component {
     this.state = {
       name: "",
       conditions: "",
-      medications: ""
+      medications: "",
+      gender: "",
+      medicalHistory: "",
+      about: "",
+      copyData: "", 
+      currentData: ""
 
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChange2 = this.handleChange2.bind(this);
     this.handleChange3 = this.handleChange3.bind(this);
+    this.handleChange4 = this.handleChange4.bind(this);
+    this.handleChange5 = this.handleChange5.bind(this);
+    this.handleChange6 = this.handleChange6.bind(this);
+    this.handleChangeRet1 = this.handleChangeRet1.bind(this);
+    this.handleChangeRet2 = this.handleChangeRet2.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitRet = this.handleSubmitRet.bind(this);
   }
+  
 
 
   handleChangeForm = (e, { value }) => this.setState({ value })
@@ -79,6 +48,21 @@ class Main extends React.Component {
   handleChange3(event) {
     this.setState({ medications: event.target.value });
   }
+  handleChange4(event) {
+    this.setState({ gender: event.target.value });
+  }
+  handleChange5(event) {
+    this.setState({ medicalHistory: event.target.value });
+  }
+  handleChange6(event) {
+    this.setState({ about: event.target.value });
+  }
+  handleChangeRet1(event) {
+    this.setState({ name: event.target.value });
+  }
+  handleChangeRet2(event) {
+    this.setState({ about: event.target.value });
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -86,14 +70,32 @@ class Main extends React.Component {
     const item = {
       name: this.state.name,
       conditions: this.state.conditions,
-      medications: this.state.medications
+      medications: this.state.medications,
+      gender: this.state.gender,
+      medicalHistory: this.state.medicalHistory,
+      about: this.state.about
     }
     itemsRef.push(item);
     this.setState({
       name: '',
       conditions: '',
-      medications: ''
+      medications: '',
+      gender: '',
+      medicalHistory: '',
+      about: ''
     })
+  }
+
+  handleSubmitRet(event) {
+    event.preventDefault();
+    let dataRep = this.state.copyData; 
+      console.log("heyyyy: ", dataRep);
+      for (let data in dataRep) {
+        if (dataRep[data].name == this.state.name) {
+          this.state.currentData = dataRep[data]
+          console.log("heyyyyaaa: ", this.state.currentData);
+        }
+      }
   }
 
 showNP = (e) => {
@@ -148,13 +150,23 @@ showRP = (e) => {
   }
 
   componentDidMount() {
-    //   const rootRef = firebase.database().ref();
-    //   const speedRef = rootRef.child('speed');
-    //   speedRef.on('value', snap => {
-    //     this.setState({
-    //       speed: snap.val()
-    //     });
-    //   });
+      const rootRef = firebase.database().ref();
+      const speedRef = rootRef.child('users');
+      speedRef.on('value', snap => {
+
+        let items = snap.val();
+        this.state.copyData = items;
+        console.log("USERSCOPY: ", this.state.copyData);
+        for (let item in items) {
+          console.log("USERSHERE: ", items[item].name)
+        }
+        
+        // this.setState({
+        //   speed: snap.val()
+        // });
+      });
+
+
   }
 
   componentWillMount() {
@@ -221,18 +233,18 @@ showRP = (e) => {
           <p id="newPatientTitle">New Patient Form</p>
           <Form>
             <Form.Group widths='equal'>
-              <Form.Field control={Input} label='First name' placeholder='First name' />
-              <Form.Field control={Input} label='Last name' placeholder='Last name' />
-              <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' />
+              <Form.Field control={Input} label='Full name' placeholder='Full name' onChange={this.handleChange} />
+              <Form.Field control={Input} label='Gender' placeholder='Gender' onChange={this.handleChange4} />
+            
             </Form.Group>
             <Form.Group widths='equal'>
-              <Form.Field control={Input} label='Conditions' placeholder="Enter any medical conditions you're experiencing "/>
-              <Form.Field control={Input} label='Medications' placeholder='Enter any over or under the counter medications you are currently taking' />
-              <Form.Field control={Input} label='Medical History' placeholder="Enter your medical history "/>
+              <Form.Field control={Input} label='Conditions' placeholder="Enter any medical conditions you're experiencing" onChange={this.handleChange2}/>
+              <Form.Field control={Input} label='Medications' placeholder='Enter any over or under the counter medications you are currently taking' onChange={this.handleChange3}/>
+              <Form.Field control={Input} label='Medical History' placeholder="Enter your medical history " onChange={this.handleChange5}/>
             </Form.Group>
-            <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...' />
+            <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...' onChange={this.handleChange6}/>
             <Form.Field control={Checkbox} label='I agree to the Terms and Conditions' />
-            {/* <Form.Field control={Button}>Submit</Form.Field> */}
+            <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
           </Form>
         </div>
 
@@ -240,18 +252,18 @@ showRP = (e) => {
           <p id="returningPatientTitle">Returning Patient Form</p>
           <Form>
             <Form.Group widths='equal'>
-              <Form.Field control={Input} label='First name' placeholder='First name' />
-              <Form.Field control={Input} label='Last name' placeholder='Last name' />
-              <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' />
+              <Form.Field control={Input} label='Full name' placeholder='Full name' onChange={this.handleChangeRet1}/>
+              
+              
             </Form.Group>
             {/* <Form.Group inline>
               <label>Quantity</label>
-              <Form.Field control={Radio} label='One' value='1' checked={value === '1'} onChange={this.handleChange} />
-              <Form.Field control={Radio} label='Two' value='2' checked={value === '2'} onChange={this.handleChange} />
-              <Form.Field control={Radio} label='Three' value='3' checked={value === '3'} onChange={this.handleChange} />
+              <Form.Field control={Radio} label='One' value='1' checked={value === '1'} onChange={} />
+              <Form.Field control={Radio} label='Two' value='2' checked={value === '2'} onChange={} />
+              <Form.Field control={Radio} label='Three' value='3' checked={value === '3'} onChange={} />
             </Form.Group> */}
-            <Form.Field control={TextArea} label='About' placeholder='Reason for your visit...' />
-            {/* <Form.Field control={Button}>Submit</Form.Field> */}
+            {/*<Form.Field control={TextArea} label='About' placeholder='Reason for your visit...' onChange={this.handleChangeRet2}/>*/}
+            <Button bsStyle="primary" onClick={this.handleSubmitRet}>Submit</Button>
           </Form>
         </div>
         {/* <div>
