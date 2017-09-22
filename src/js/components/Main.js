@@ -1,19 +1,28 @@
 'use strict';
+/* import react and redix seetings */
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import ReactDOM from "react-dom"
+/* import Firebase */
 import * as firebase from 'firebase';
+/* import bootstrap componenets here */
 import { Navbar, Jumbotron, Button, Nav, NavItem, navInstance, NavDropdown, MenuItem, FormGroup, InputGroup, FormControl, DropdownButton, Col, ControlLabel } from 'react-bootstrap';
 import { scroller } from 'react-scroll';
+/* import Semantics UI components here */
 import { Divider, Image, List, Checkbox, Form, Input, Radio, Select, TextArea } from 'semantic-ui-react'
+/* import extra third party components */
 import { Autosize, Autocomplete, DropDown, Mask, DatePicker, Combobox } from "react-input-enhancements"
-import ReactDOM from "react-dom"
+
 
 
 class Main extends React.Component {
   constructor(props) {
+  	/* initialize states that will be used throughout the application */
     super(props);
     this.state = {
+
+    /* store initial for data that will be redisplayed from the new user page */
       name: "",
       conditions: "",
       medications: "",
@@ -21,6 +30,9 @@ class Main extends React.Component {
       medicalHistory: "",
       family: "",
       about: "",
+      age: "",
+
+    /* Data that is pulled from returning users database */
       copyData: "", 
       currentData: "", 
       immediateAttn: "", 
@@ -28,12 +40,14 @@ class Main extends React.Component {
       suggestedResources: "",
       suggesTitle: "",
       currentResources: [],
-      age: "",
+
+    /* initialize toggle buttons for new user form checkboxes */
       toggleHs: false,
       toggleFp: false,
       toggleFc: false
 
     };
+    /* bind functions used in the new user form*/
     this.handleChange = this.handleChange.bind(this);
     this.handleChange2 = this.handleChange2.bind(this);
     this.handleChange3 = this.handleChange3.bind(this);
@@ -41,21 +55,27 @@ class Main extends React.Component {
     this.handleChange5 = this.handleChange5.bind(this);
     this.handleChange6 = this.handleChange6.bind(this);
     this.handleChange7 = this.handleChange7.bind(this);
+
+    /* bind functions used in the returning user form*/
     this.handleChangeRet1 = this.handleChangeRet1.bind(this);
     this.handleChangeRet2 = this.handleChangeRet2.bind(this);
+
+    /* bind functions used in handle submit form for new and returning users form*/
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmitRet = this.handleSubmitRet.bind(this);
+
+    /* bind functions used in the new users checkboxes section of the form*/
     this.toggleHs = this.toggleHs.bind(this);
     this.toggleFp = this.toggleFp.bind(this);
     this.toggleFc = this.toggleFc.bind(this);
   }
   
-
-
+/* Define Functions here */
 
   getInput() {
     return input;
   }
+  /* Define functions used in the new user form*/
   handleChangeForm = (e, { value }) => this.setState({ value })
 
   handleChange(event) {
@@ -79,12 +99,16 @@ class Main extends React.Component {
   handleChange7(event) {
     this.setState({ family: event.target.value });
   }
+
+  /* Define functions used in the returning users form*/
   handleChangeRet1(event) {
     this.setState({ name: event.target.value });
   }
   handleChangeRet2(event) {
     this.setState({ about: event.target.value });
   }
+
+  /* Define functions used in the returning user form for checkboxes */
   toggleHs(event) {
     this.setState({ toggleHs: !this.state.toggleHs });
   }
@@ -95,7 +119,16 @@ class Main extends React.Component {
     this.setState({ toggleFc: !this.state.toggleFc });
   }
 
+/* The handle submit function handles the new users sumbit form. 
+	It stores the new user in the database using the appropriate 
+	fields and updates the DOM to reflect the new data for the new page 
+	that loads in the user's window. This function is resonponsible for
+	parsing the data from the medical conditions input area and runing the 
+	NLP to match the keywords in the database and show the medical clinincs
+	that best match the input text*/
+
   handleSubmit(event) {
+  	/* Update database*/
     event.preventDefault();
     const itemsRef = firebase.database().ref('users');
     const item = {
@@ -110,8 +143,11 @@ class Main extends React.Component {
     
     itemsRef.push(item);
     
+    /* Update DOM */
     this.forceUpdate();
     console.log("conditions::::  ", this.state.conditions);
+
+    /* NLP */
 
     var clinics = this.state.clinicList;
     var conditionList = this.state.conditions.split(" ");
@@ -137,6 +173,7 @@ class Main extends React.Component {
     console.log("index:  ", index);
     console.log("index:  ", indexTitle);
 
+    /* Display Form data */
     document.getElementById("newPatient").style.display = "none";
     document.getElementById("patientDataRecs").style.display = "block";
     scroller.scrollTo('patientDataRecs', {
@@ -147,6 +184,9 @@ class Main extends React.Component {
     })
 
   }
+
+/* Returning user submit function that gets data corresponding to the user
+ from the database and displays it in the loaded page from the DOM */
 
   handleSubmitRet(event) {
     event.preventDefault();
@@ -176,6 +216,7 @@ class Main extends React.Component {
     })
   }
 
+/* Site functions that control functionality like auto scrolling  */
   scrollResults = (e) => {
     scroller.scrollTo('patientDataRecs', {
       duration: 1500,
@@ -229,16 +270,20 @@ class Main extends React.Component {
       offset: -60
     })
   }
+
+  /* Function to search array for matching strings to return number of matching items in an array */
 searchStringInArray = (str, strArray) => {
     for (var j=0; j<strArray.length; j++) {
         if (strArray[j].match(str)) return 1;
     }
     return 0;
 }
+
+/* Function for compare to two arrays for matching strings using the searchStringInArray function NOTE: needs fixing. */
 compArrays = (Arr1, Arr2) => {
   var count = 0;
   for (var j = 0; j<Arr1; j++) {
-  count += searchStringInArray(Arr1[j],Arr2);
+  count += searchStringInArray(Arr1[j], Arr2);
   }
   return count;
 }
@@ -253,12 +298,14 @@ compArrays = (Arr1, Arr2) => {
   //   })
   // }
 
+/* hnadles displaying of display doc after submiting new user form */
   showNP = (e) => {
     console.log("inside show new");
     document.getElementById("newPatient").style.display = "block";
     document.getElementById("returningPatient").style.display = "none";
   }
 
+/* hnadles displaying of display doc after submiting returning user form */
   showRP = (e) => {
     console.log("inside show returning");
     document.getElementById("newPatient").style.display = "none";
@@ -283,6 +330,8 @@ compArrays = (Arr1, Arr2) => {
   }
 
 
+/* handles scrolling of web page as sbmit is clicked, clears states of any data since 
+	form is already submited to the database */
 
   scrollNP = (e) => {
     console.log("bye");
@@ -309,6 +358,9 @@ compArrays = (Arr1, Arr2) => {
     console.log(e.target.value);
   }
 
+  /* handles scrolling of web page as sbmit is clicked, clears states of any data since 
+	form is already submited to the database */
+
   scrollRP = (e) => {
     console.log("hello");
     this.showRP();
@@ -330,6 +382,7 @@ compArrays = (Arr1, Arr2) => {
     })
   }
 
+/* Gets data from the database before DOM is displayed */
   componentDidMount() {
       const rootRef = firebase.database().ref();
       const speedRef = rootRef.child('users');
@@ -379,6 +432,7 @@ compArrays = (Arr1, Arr2) => {
 
 
     return (
+	//{ UI elements like headers and large picture fluid containers }
       <div className="WebPage">
         <div id="menu">
           <Navbar id="navBarMenu" fixedTop={true} onMouseEnter={this.handleHover} style={{ opacity: 0.7 }} >
@@ -415,6 +469,8 @@ compArrays = (Arr1, Arr2) => {
 
         </div>
 
+   		{/* NEW PATIENT form handling input and submitions */}
+
         <div id="newPatient">
           <p id="newPatientTitle">New Patient Form</p>
           <Form id="newPF">
@@ -447,6 +503,8 @@ compArrays = (Arr1, Arr2) => {
             {/* <Form.Field control={Button}>Submit</Form.Field> */}
           </Form>
         </div>
+
+        {/* OUTPUT of patient data, displays all patient records and suggested medical clinics based on conditions */}
 
         <div id="patientDataRecs">
           <p id="welcomePatientTitle" style={{ fontSize: 40 }}>Welcome {this.state.name}</p>
@@ -525,6 +583,8 @@ compArrays = (Arr1, Arr2) => {
           </div>
         </div>
 
+    {/* Returning Patient form submit */}
+
         <div id="returningPatient" >
           <p id="returningPatientTitle">Returning Patient Form</p>
           <Form>
@@ -544,7 +604,7 @@ compArrays = (Arr1, Arr2) => {
           </Form>
         </div>
 
-
+    {/* FILTER FORMS UNDER CONSTRUCTION */}
 
         <div id="shelters">
           <p id="sheltersTitle"> Shelters </p>
